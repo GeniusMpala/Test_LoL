@@ -168,11 +168,20 @@ html_content = f'''
 
     <script>
         let dodgeCount = 0;
-        const maxDodges = 2;
+        const maxDodges = 3;
+        let lastDodgeTime = 0;
 
-        // Dodge the button
+        // Dodge the button - works for both hover and touch
         function dodgeButton() {{
-            if (dodgeCount >= maxDodges) return;
+            const now = Date.now();
+            // Prevent double triggering within 300ms
+            if (now - lastDodgeTime < 300) return;
+            lastDodgeTime = now;
+            
+            if (dodgeCount >= maxDodges) {{
+                showSadCat();
+                return;
+            }}
             
             const noBtn = document.getElementById('noBtn');
             
@@ -193,11 +202,14 @@ html_content = f'''
         }}
 
         // Handle No button click
-        function handleNoClick() {{
+        function handleNoClick(event) {{
+            event.preventDefault();
             dodgeCount++;
             
-            if (dodgeCount >= 3) {{
+            if (dodgeCount >= maxDodges) {{
                 showSadCat();
+            }} else {{
+                dodgeButton();
             }}
         }}
 
@@ -211,6 +223,15 @@ html_content = f'''
             document.getElementById('question-screen').classList.add('hidden');
             document.getElementById('sad-screen').style.display = 'block';
         }}
+
+        // Add touch support for mobile
+        document.addEventListener('DOMContentLoaded', function() {{
+            const noBtn = document.getElementById('noBtn');
+            noBtn.addEventListener('touchstart', function(e) {{
+                e.preventDefault();
+                handleNoClick(e);
+            }}, {{ passive: false }});
+        }});
     </script>
 </body>
 </html>
