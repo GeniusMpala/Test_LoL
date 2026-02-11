@@ -149,9 +149,17 @@ html_content = f'''
 </head>
 <body>
     <div class="container">
+        <!-- Intro Screen -->
+        <div id="intro-screen">
+            <p class="question">Hey Lyn, I got an ask 💭</p>
+            <div class="buttons">
+                <button class="btn btn-yes" onclick="showQuestion()">Ask Away 🤔</button>
+            </div>
+        </div>
+
         <!-- Main Question Screen -->
-        <div id="question-screen">
-            <p class="question">Will you be my Valentine?🌹</p>
+        <div id="question-screen" class="hidden">
+            <p class="question">Will you be my Valentine? 🌹</p>
             <div class="buttons">
                 <button class="btn btn-yes" id="yesBtn" onclick="sayYes()">Yes! 💕</button>
                 <button class="btn btn-no" id="noBtn" onmouseenter="dodgeButton()" onclick="handleNoClick()">No 💔</button>
@@ -170,6 +178,12 @@ html_content = f'''
         let dodgeCount = 0;
         const maxDodges = 3;
         let lastDodgeTime = 0;
+
+        // Show the Valentine question
+        function showQuestion() {{
+            document.getElementById('intro-screen').classList.add('hidden');
+            document.getElementById('question-screen').classList.remove('hidden');
+        }}
 
         // Dodge the button - works for both hover and touch
         function dodgeButton() {{
